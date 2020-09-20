@@ -7,7 +7,7 @@ export class Helper {
             }
             return  this.fs.readFileSync(url, 'utf8'); 
         } catch (error) {
-            console.log('======>', error);
+            console.log('=====>', error);
         }
       }
 
