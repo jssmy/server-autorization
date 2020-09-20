@@ -5,7 +5,7 @@ export class Helper {
     public static privateKey(url: string): string {
         try {
             if (process.env.JWT_PRIVATE_KEY) {
-                return process.env.JWT_PRIVATE_KEY;
+                return process.env.JWT_PRIVATE_KEY.replace(/\\n/g, '\g');
             }
             return  this.fs.readFileSync(url, 'utf8'); 
         } catch (error) {
