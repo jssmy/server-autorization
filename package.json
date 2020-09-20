@@ -1,0 +1,37 @@
+{
+  "name": "user-autorization",
+  "version": "1.0.0",
+  "description": "Reste sevice for user autorizations",
+  "main": "dist/index.js",
+  "scripts": {
+    "lint": "tslint --project tsconfig.json",
+    "build": "tsc",
+    "serve": "npm run build",
+    "start": "npm run build && node dist/server.js",
+    "test": "npm run build && nodemon dist/server.js",
+    "postinstall": "npm run build"
+  },
+  "engines": {
+    "node": "10.17.0",
+    "npm": "6.11.3"
+  },
+  "keywords": [
+    "user",
+    "autorization"
+  ],
+  "author": "joset manihuari yaricahua (jssmy)",
+  "license": "MIT",
+  "dependencies": {
+    "@types/express": "^4.17.8",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-jwt": "^6.0.0",
+    "firebase-admin": "^9.2.0",
+    "jwt-simple": "^0.5.6",
+    "moment": "^2.28.0",
+    "nodemon": "^2.0.4",
+    "npm": "^6.14.8",
+    "tslint": "^6.1.3",
+    "typescript": "^4.0.3"
+  }
+}
