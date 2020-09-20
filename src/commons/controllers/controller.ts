@@ -1,7 +1,7 @@
 import * as admin from 'firebase-admin';
 import { Helper } from '../helpers/helpers';
 const fileSecret = Helper.firebaseLogin('secret-client.json');
-console.log(fileSecret);
+console.log('--------->',fileSecret);
 admin.initializeApp({
   credential: admin.credential.cert(fileSecret),
   databaseURL: "https://user-autorization.firebaseio.com"

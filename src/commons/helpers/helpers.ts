@@ -1,3 +1,5 @@
+import { IFirabaseSecret } from "../models/ifirebase-secret";
+
 export class Helper {
     public static fs = require('fs');
     public static privateKey(url: string): string {
@@ -15,7 +17,7 @@ export class Helper {
         if (this.fs.existsSync(url)) {
             return  JSON.parse(this.fs.readFileSync(url, 'utf8'));
         }
-        const fileSecret = {            
+        const fileSecret: IFirabaseSecret = {            
             type: 'service_account',
             project_id: process.env.PROJECT_ID,
             private_key_id: process.env.PRIVATE_KEY_ID,
