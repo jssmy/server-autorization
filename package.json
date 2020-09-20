@@ -2,7 +2,7 @@
   "name": "user-autorization",
   "version": "1.0.0",
   "description": "Reste sevice for user autorizations",
-  "main": "dist/index.js",
+  "main": "dist/server.js",
   "scripts": {
     "lint": "tslint --project tsconfig.json",
     "build": "tsc",
