@@ -1,11 +1,10 @@
 import { query, Request, Response }  from 'express';
 import { DateHelper } from '../helpers/date-helper';
+import { Helper } from '../helpers/helpers';
 import { Controller } from './controller';
 const jwt = require('jsonwebtoken');
-const fs = require('fs');
-const privateKey = fs.readFileSync('private.pem');
-const publicKey = fs.readFileSync('public.pem');
 const jwtSimple = require('jwt-simple');
+
 export class AuthController extends Controller {
     protected static collectionName = 'users';
     public static async auth(req: Request, res: Response) {
@@ -25,7 +24,7 @@ export class AuthController extends Controller {
                 }
                 const expiresIn = DateHelper.now().add(2, 'hours').toDate().getTime();
                 const user = query.docs[0].data();
-                const token= jwt.sign(user, privateKey, { algorithm: 'RS256'} , { expiresIn });
+                const token= jwt.sign(user, Helper.privateKey('private.pem'), { algorithm: 'RS256'} , { expiresIn });
                 const autorization = jwtSimple.encode({ user: user, token: token, expiresIn, created: DateHelper.current().getTime() }, 'env-dev-commerce.herokuapp.com');
                 res.status(200).send({
                     message: 'Usuario autenticado',
