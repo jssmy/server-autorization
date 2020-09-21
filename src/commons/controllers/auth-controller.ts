@@ -24,9 +24,8 @@ export class AuthController extends Controller {
                 }
                 const expiresIn = DateHelper.now().add(2, 'hours').toDate().getTime();
                 const user = query.docs[0].data();
-                console.log(Helper.privateKey('private.pem'));
                 const token= jwt.sign(user, Helper.privateKey('private.pem'), { algorithm: 'RS256'} , { expiresIn });
-                const autorization = jwtSimple.encode({ user: user, token: token, expiresIn, created: DateHelper.current().getTime() }, 'env-dev-commerce.herokuapp.com');
+                const autorization = jwtSimple.encode({ user: user, token: token, expiresIn, created: DateHelper.current().getTime() }, req.header('host'));
                 res.status(200).send({
                     message: 'Usuario autenticado',
                     status: 200,
