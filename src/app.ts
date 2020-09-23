@@ -24,7 +24,7 @@ app.set('port', process.env.PORT || 3000);
  * ROUTES
 */
 app.get('/', (req, res) => {
-    res.send('default');
+    res.send('default route');
 });
 
 app.post('/api/create/user', (req, res) => UserController.create(req, res));
