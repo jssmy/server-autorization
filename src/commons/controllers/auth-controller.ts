@@ -25,7 +25,7 @@ export class AuthController extends Controller {
                 const expiresIn = DateHelper.now().add(2, 'hours').toDate().getTime();
                 const user = query.docs[0].data();
                 const token= jwt.sign(user, Helper.privateKey('private.pem'), { algorithm: 'RS256'} , { expiresIn });
-                const autorization = Buffer.from(token).toString('base64');
+                const autorization = btoa(token);
                 res.status(200).send({
                     message: 'Usuario autenticado',
                     status: 200,
