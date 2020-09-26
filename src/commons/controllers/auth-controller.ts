@@ -3,7 +3,7 @@ import { DateHelper } from '../helpers/date-helper';
 import { Helper } from '../helpers/helpers';
 import { Controller } from './controller';
 const jwt = require('jsonwebtoken');
-const jwtSimple = require('jwt-simple');
+
 
 export class AuthController extends Controller {
     protected static collectionName = 'users';
@@ -25,7 +25,7 @@ export class AuthController extends Controller {
                 const expiresIn = DateHelper.now().add(2, 'hours').toDate().getTime();
                 const user = query.docs[0].data();
                 const token= jwt.sign(user, Helper.privateKey('private.pem'), { algorithm: 'RS256'} , { expiresIn });
-                const autorization = jwtSimple.encode({ user: user, token: token, expiresIn, created: DateHelper.current().getTime() }, req.header('host'));
+                const autorization = Buffer.from(token).toString('base64');
                 res.status(200).send({
                     message: 'Usuario autenticado',
                     status: 200,
