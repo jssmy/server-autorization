@@ -1,6 +1,7 @@
 import { query, Request, Response }  from 'express';
 import { DateHelper } from '../helpers/date-helper';
 import { Helper } from '../helpers/helpers';
+import { IUser } from '../models/iuser';
 import { Controller } from './controller';
 const jwt = require('jsonwebtoken');
 
@@ -22,14 +23,26 @@ export class AuthController extends Controller {
                         status: 401
                     });
                 }
-                const expiresIn = DateHelper.now().add(2, 'hours').toDate().getTime();
-                const user = query.docs[0].data();
-                const token= jwt.sign(user, Helper.privateKey('private.pem'), { algorithm: 'RS256'} , { expiresIn });
-                const autorization = btoa(token);
+                const expiresIn = DateHelper.expiresTime(1);
+                const doc = query.docs[0];
+                const privateInformation: IUser = {
+                    id: doc.id,
+                    email: doc.data().email,
+                    name: doc.data().name,
+                    lastName: doc.data().lastName
+                };
+                const user = doc.data();
+                const token= jwt.sign(privateInformation, Helper.privateKey('private.pem'), { algorithm: 'RS256'} , { expiresIn });
+                const autorization = {
+                    user,
+                    accessToken: token,
+                    expiresIn
+                };
+                
                 res.status(200).send({
                     message: 'Usuario autenticado',
                     status: 200,
-                    autorization: autorization,
+                    autorization: Buffer.from(JSON.stringify(autorization)).toString('base64'),
                 });
 
             });
