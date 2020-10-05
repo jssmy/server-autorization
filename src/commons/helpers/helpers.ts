@@ -1,4 +1,4 @@
-import { IFirabaseSecret } from "../models/ifirebase-secret";
+import { IFirabaseSecret } from "../interfaces/ifirebase-secret";
 
 export class Helper {
     public static fs = require('fs');
@@ -7,11 +7,24 @@ export class Helper {
             if (process.env.JWT_PRIVATE_KEY) {
                 return process.env.JWT_PRIVATE_KEY.replace(/\\n/g, '\n');
             }
+            
             return  this.fs.readFileSync(url, 'utf8'); 
-        } catch (error) {
-            console.log('=====>', error);
-        }
-      }
+            } catch (error) {
+                throw new Error(error);
+            }
+    }
+
+    public static publicKey(url: string) {
+        try {
+            if (process.env.JWT_PUBLIC_KEY) {
+                return process.env.JWT_PUBLIC_KEY.replace(/\\n/g, '\n');
+            }
+            
+            return  this.fs.readFileSync(url, 'utf8'); 
+            } catch (error) {
+                throw new Error(error);
+            }
+    }
 
       public static firebaseLogin(url: string) {
         if (this.fs.existsSync(url)) {
