@@ -34,6 +34,6 @@ app.get('/', (req, res) => {
 
 app.post('/api/create/user', (req, res) => UserController.create(req, res));
 app.post('/api/auth/user', (req, res) => AuthController.auth(req, res));
-
+app.post('/api/logout/user', (req, res) => AuthController.logout(req, res));
 
 export default app;

@@ -1,7 +1,7 @@
 import { Request, Response }  from 'express';
 import { GrantType } from '../emuns/grant-type.enum';
 import { HttpCode } from '../emuns/http-code.enum';
-import { OauthError } from '../errors/oauth.errors';
+import { OauthError } from '../constants/oauth.errors';
 import { DateHelper } from '../helpers/date-helper';
 import { OAuthHelper } from '../helpers/oauth-helper';
 import { IGenericError } from '../interfaces/igeneric-error';
@@ -10,6 +10,8 @@ import { IRefreshToken } from '../interfaces/irefresh-token';
 import { IUser } from '../interfaces/iuser';
 import { RefreshToken } from '../models/refresh-token.class';
 import { User } from '../models/user.class';
+import { OauthMessages } from '../constants/oauth.messges';
+import { IGenericSuccess } from '../interfaces/igeneric-success';
 
 export class AuthController  {
     
@@ -82,7 +84,7 @@ export class AuthController  {
             };
             return generic;
         }
-        console.log('expires_in', DateHelper.isExpired(refreshToken.expires_in));
+
         if (DateHelper.isExpired(refreshToken.expires_in)) {
             const error: IGenericError = {
                 error: OauthError.expiredRefreshToken.error,
@@ -112,7 +114,7 @@ export class AuthController  {
         }
 
         const generate = OAuthHelper.generateAccess(user); // generate accessToken
-        console.log(generate);
+   
         await RefreshToken.create(generate.refresh_token); // save new refresh
         
         await RefreshToken.disable(refreshToken); // disable refreshToken
@@ -124,6 +126,41 @@ export class AuthController  {
         return generic;
         } catch (error) {
             throw new Error(error);
+        }
+    }
+
+    public static async logout(req: Request, res: Response) {
+        try {
+            const generic: IGenericResponse = await RefreshToken.find(req.header('refresh_token')).then(async (refreshToken: IRefreshToken)=> {
+                if (!refreshToken) {
+                    const error: IGenericError = {
+                        error: OauthError.invalidRefreshToken.error,
+                        error_description: OauthError.invalidRefreshToken.description
+                    };
+                    const generic: IGenericResponse = {
+                        status: OauthError.invalidRefreshToken.status,
+                        body: error
+                    };
+                    return generic;
+                }
+    
+                await RefreshToken.disable(refreshToken);
+    
+                const message: IGenericSuccess = {
+                    message: OauthMessages.successLogout.message,
+                    message_description: OauthMessages.successLogout.description
+                };
+                const generic: IGenericResponse = {
+                    status: OauthMessages.successLogout.status,
+                    body: message
+                };
+    
+                return generic;
+            });
+        
+            return res.status(generic.status).send(generic.body)
+        } catch (error) {
+            throw new Error(error);           
         }
     }
 }

@@ -1,7 +1,7 @@
-import { NextFunction, response } from "express";
-import { query, Request, Response }  from 'express';
+import { NextFunction } from "express";
+import {  Request, Response }  from 'express';
 import { GrantType } from "../emuns/grant-type.enum";
-import { OauthError } from "../errors/oauth.errors";
+import { OauthError } from "../constants/oauth.errors";
 import { IGenericError } from "../interfaces/igeneric-error";
 
 export class AccessTokenMiddleware {
@@ -19,7 +19,7 @@ export class AccessTokenMiddleware {
             return res.status(400).send(error);
         }
 
-        if ([GrantType.refresh_token.toString(), GrantType.password.toString()].indexOf(grant) === -1) {
+        if ([GrantType.refresh_token.toString(), GrantType.password.toString(), GrantType.logout.toString()].indexOf(grant) === -1) {
 
             const error: IGenericError = {
                 error: OauthError.invalidGrantType.error,
