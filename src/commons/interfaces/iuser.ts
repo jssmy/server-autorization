@@ -11,6 +11,8 @@ export interface IUser {
 }
 
 interface IAccountInformation {
-    profileImage: string;
+    profileImage?: string;
     coverImage: string;
+    id: string;
+    provider: string
 }

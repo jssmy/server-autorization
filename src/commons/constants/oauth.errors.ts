@@ -15,7 +15,8 @@ export const OauthError = {
         error: 'missing_email_credential',
         description: 'Request missing email credential',
         status: HttpCode.badRequest
-    }, missingPasswordCredential: {
+    },
+    missingPasswordCredential: {
         error: 'missing_password_credential',
         description: 'Request missing password credential',
         status: HttpCode.badRequest
@@ -44,5 +45,54 @@ export const OauthError = {
         error: 'invalid_user',
         description: 'Invalid user for refresh token',
         status: HttpCode.unautorized
+    },
+    missingAccessToken: {
+        error: 'missing_access_token',
+        description: 'Request missing access token',
+        status: HttpCode.badRequest
+    },
+    missingIdToken: {
+        error: 'missing_id_token',
+        description: 'Request missing id token',
+        status: HttpCode.badRequest
+    },
+    invalidAccessToken: {
+        error: 'invalid_access_token',
+        description: 'Request has invalid access token',
+        status: HttpCode.unautorized
+    },
+    missingUserInformation: {
+        error: 'missing_user_information',
+        description: 'Request missing user information',
+        status: HttpCode.badRequest
+    },
+    internalError: {
+        error: 'internal_error',
+        description: 'Internal error server',
+        status: HttpCode.serverError
+    },
+    invalidProvider: {
+        error: 'invalid_provider',
+        description: 'Reques has invalid provider',
+        status: HttpCode.badRequest
     }
+};
+
+
+export enum AuthErrorTypes  {
+    invalidGrantType = 'invalidGrantType',
+    missingGranType = 'missingGranType',
+    missingEmailCredetential = 'missingEmailCredetential',
+    missingPasswordCredential = 'missingPasswordCredential',
+    invalidCredencials = 'invalidCredencials',
+    missingRefreshToken = 'missingRefreshToken',
+    invalidRefreshToken = 'invalidRefreshToken',
+    expiredRefreshToken = 'expiredRefreshToken',
+    invalidUser = 'invalidUser',
+    missingAccessToken = 'missingAccessToken',
+    missingIdToken = 'missingIdToken',
+    invalidAccessToken = 'invalidAccessToken',
+    missingUserInformation = 'missingUserInformation',
+    internalError = 'internalError',
+    invalidProvider = 'invalidProvider'
 };

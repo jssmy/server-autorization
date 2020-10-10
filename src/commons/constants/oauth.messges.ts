@@ -5,3 +5,7 @@ export const OauthMessages = {
         status: 200
     }
 };
+
+export enum AuthMessagesType {
+    successLogout = 'successLogout'
+}

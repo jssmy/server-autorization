@@ -13,4 +13,8 @@ export class Model {
     public static collection() {
         return this.db.collection(this.collectionName);
     }
+
+    public static collectionGroup(group: string) {
+      return this.db.collectionGroup(group);
+    }
 }
