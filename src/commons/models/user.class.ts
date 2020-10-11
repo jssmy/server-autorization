@@ -26,7 +26,7 @@ export class User  extends Model{
                                         id: null,
                                         provider: null,
                                         coverImage: null,
-                                        profileImage: doc.data().profileImage,
+                                        profileImage: doc.data().accounInformation.profileImage,
                                     },
                                 };
                             }
@@ -57,7 +57,7 @@ export class User  extends Model{
                         coverImage: null,
                         id: null,
                         provider: null,
-                        profileImage: userDoc.profileImage
+                        profileImage: userDoc.accounInformation.profileImage
                     }
                 };
                 
@@ -87,7 +87,7 @@ export class User  extends Model{
                                 coverImage: null,
                                 id: null,
                                 provider: null,
-                                profileImage: doc.data().profileImage,
+                                profileImage: doc.data().accounInformation.profileImage,
                             }
                             };
                         }
