@@ -2,7 +2,7 @@ import { DateHelper } from "../helpers/date-helper";
 import { ISocialProvider } from "../interfaces/isocial-provider";
 import { IUser } from "../interfaces/iuser";
 import { Model } from "./model.class";
-
+const crypto = require('crypto');
 export class User  extends Model{
     protected static collectionName = 'users';
     
@@ -81,16 +81,19 @@ export class User  extends Model{
         }
     }
 
-    public static async create(user: IUser): Promise<boolean> {
+    public static async create(user: IUser): Promise<IUser> {
         try {
+            const userId = crypto.randomBytes(20).toString('hex');
             user.state = true;
             user.created = DateHelper.current().getTime();
             user.updated = DateHelper.current().getTime();
             user.accounInformation.profileImage = user.accounInformation.profileImage || null;
             user.password = user.password || null;
             user.id = user.id || null;
-            await this.collection().doc().create(user);
-            return true;
+            await this.collection().doc(userId).create(user);
+            user.id = userId;
+            return user;
+
         } catch (error) {
             throw new Error(error);
         }
