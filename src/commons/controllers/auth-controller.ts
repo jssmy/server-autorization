@@ -8,11 +8,9 @@ import { IRefreshToken } from '../interfaces/irefresh-token';
 import { IUser } from '../interfaces/iuser';
 import { RefreshToken } from '../models/refresh-token.class';
 import { User } from '../models/user.class';
-import { AuthMessagesType, OauthMessages } from '../constants/oauth.messges';
-import { ISocialProvider } from '../interfaces/isocial-provider';
+import { AuthMessagesType } from '../constants/oauth.messges';
 import { AuthErrorHelper } from '../helpers/auth-error-helper';
 import { AuthMessageHelper } from '../helpers/auth-messages-helper';
-import { SocialAuth } from '../helpers/social-auth';
 
 export class AuthController  {
     
@@ -118,20 +116,20 @@ export class AuthController  {
         }
     }
 
-    public static async socialAccessToken(userProvider: ISocialProvider) {
+    public static async socialAccessToken(userProvider: IUser) {
         try {
             /// validate access token for provider
             let user: IUser = await User.findByProvider(userProvider);
             if (!user) { // user not found
                 user  = {
-                    email: userProvider.user.email,
-                    name: userProvider.user.name,
-                    lastName: userProvider.user.lastName,
+                    email: userProvider.email,
+                    name: userProvider.name,
+                    lastName: userProvider.lastName,
                     accounInformation: {
                         coverImage: null,
-                        profileImage: userProvider.user.profileImage,
-                        id: userProvider.user.id,
-                        provider: userProvider.provider,
+                        profileImage: userProvider.accounInformation.profileImage,
+                        id: userProvider.accounInformation.id,
+                        provider: userProvider.accounInformation.provider,
                     }
                 }
                 user  = await User.create(user);

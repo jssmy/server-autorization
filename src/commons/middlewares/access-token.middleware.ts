@@ -8,6 +8,7 @@ import e = require("express");
 import { HttpCode } from "../emuns/http-code.enum";
 import { ISocialProvider } from "../interfaces/isocial-provider";
 import { AuthErrorHelper } from "../helpers/auth-error-helper";
+import { IUser } from "../interfaces/iuser";
 
 export class AccessTokenMiddleware {
     public static async validate(req: Request, res: Response, next: NextFunction) {
@@ -44,22 +45,20 @@ export class AccessTokenMiddleware {
                 const error = AuthErrorHelper.generic(AuthErrorTypes.missingAccessToken);
                 return res.status(error.status).send(error.body);
             }
-            const userProvider: ISocialProvider = req.body;
-            if (['google', 'facebook'].indexOf(userProvider.provider) === -1) {
+            const userProvider: IUser = req.body;
+            if (['google', 'facebook'].indexOf(userProvider.accounInformation.provider) === -1) {
                 const error = AuthErrorHelper.generic(AuthErrorTypes.invalidProvider);
                 return res.status(error.status).send(error.body);
             }
-            if (userProvider.provider === 'google') {
+            if (userProvider.accounInformation.provider === 'google') {
                 const generic = await SocialAuth.google(req.header('id_token'));
                 if (generic.status !== HttpCode.success) {
                     const error = AuthErrorHelper.generic(AuthErrorTypes.invalidAccessToken);
                     return res.status(error.status).send(error.body);
                 }
-            } else if (userProvider.provider === 'facebook') {
+            } else if (userProvider.accounInformation.provider === 'facebook') {
                 
             }
-
-            
 
         }
         return next(); 

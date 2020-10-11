@@ -13,7 +13,10 @@ export class OAuthHelper {
         const publicInformation: IUser = {
             email: user.email,
             name: user.name,
-            lastName: user.lastName
+            lastName: user.lastName,
+            accounInformation: {
+                profileImage: user.accounInformation.profileImage
+            }
         };
 
         const refresh: IRefreshToken = this.refreshToken(user);

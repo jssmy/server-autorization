@@ -13,7 +13,6 @@ export class User  extends Model{
                         .where('email', '==', email)
                         .where('password', '==', password)
                         .where('state', '==', true)
-                        .select('name', 'email','lastName')
                         .limit(1)
                         .get().then(query => {
                             if (!query.empty) {
@@ -22,7 +21,13 @@ export class User  extends Model{
                                     id: doc.id,
                                     email: doc.data().email,
                                     name: doc.data().name,
-                                    lastName: doc.data().lastName
+                                    lastName: doc.data().lastName,
+                                    accounInformation: {
+                                        id: null,
+                                        provider: null,
+                                        coverImage: null,
+                                        profileImage: doc.data().profileImage,
+                                    },
                                 };
                             }
                         })
@@ -48,6 +53,12 @@ export class User  extends Model{
                     lastName: userDoc.lastName,
                     name: userDoc.name,
                     id: query.id,
+                    accounInformation: {
+                        coverImage: null,
+                        id: null,
+                        provider: null,
+                        profileImage: userDoc.profileImage
+                    }
                 };
                 
                 return user;
@@ -57,12 +68,12 @@ export class User  extends Model{
         }
     }
 
-    public static async findByProvider(userProvider: ISocialProvider): Promise<IUser> {
+    public static async findByProvider(userProvider: IUser): Promise<IUser> {
         try {
             let user: IUser = null;
             return  await this.collection()
-                    .where('accounInformation.id','==', userProvider.user.id)
-                    .where('accounInformation.provider', '==', userProvider.provider)
+                    .where('accounInformation.id','==', userProvider.accounInformation.id)
+                    .where('accounInformation.provider', '==', userProvider.accounInformation.provider)
                     .get()
                     .then((query) => {
                     if (!query.empty) {
@@ -71,7 +82,13 @@ export class User  extends Model{
                             id: doc.id,
                             email: doc.data().email,
                             name: doc.data().name,
-                            lastName: doc.data().lastName
+                            lastName: doc.data().lastName,
+                            accounInformation: {
+                                coverImage: null,
+                                id: null,
+                                provider: null,
+                                profileImage: doc.data().profileImage,
+                            }
                             };
                         }
                         return user;
@@ -83,7 +100,7 @@ export class User  extends Model{
 
     public static async create(user: IUser): Promise<IUser> {
         try {
-            const userId = crypto.randomBytes(20).toString('hex');
+            const userId = crypto.randomBytes(10).toString('hex');
             user.state = true;
             user.created = DateHelper.current().getTime();
             user.updated = DateHelper.current().getTime();
