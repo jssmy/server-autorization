@@ -12,8 +12,7 @@ export class OAuthHelper {
 
         const publicInformation: IUser = {
             email: user.email,
-            name: user.name,
-            lastName: user.lastName,
+            fullName: user.fullName,
             accounInformation: {
                 profileImage: user.accounInformation.profileImage
             }

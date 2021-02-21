@@ -20,12 +20,11 @@ export class User  extends Model{
                                 user = {
                                     id: doc.id,
                                     email: doc.data().email,
-                                    name: doc.data().name,
-                                    lastName: doc.data().lastName,
+                                    fullName: doc.data().fullName,
                                     accounInformation: {
-                                        id: null,
-                                        provider: null,
-                                        coverImage: null,
+                                        id: doc.data().id,
+                                        provider: doc.data().provider,
+                                        coverImage: doc.data().coverImage,
                                         profileImage: doc.data().accounInformation.profileImage,
                                     },
                                 };
@@ -50,13 +49,12 @@ export class User  extends Model{
                 
                 const user: IUser = {
                     email: userDoc.email,
-                    lastName: userDoc.lastName,
-                    name: userDoc.name,
+                    fullName: userDoc.fullName,
                     id: query.id,
                     accounInformation: {
-                        coverImage: null,
-                        id: null,
-                        provider: null,
+                        coverImage: userDoc.coverImage,
+                        id: userDoc.id,
+                        provider: userDoc.provider,
                         profileImage: userDoc.accounInformation.profileImage
                     }
                 };
@@ -81,12 +79,11 @@ export class User  extends Model{
                         user = {
                             id: doc.id,
                             email: doc.data().email,
-                            name: doc.data().name,
-                            lastName: doc.data().lastName,
+                            fullName: doc.data().fullName,
                             accounInformation: {
-                                coverImage: null,
-                                id: null,
-                                provider: null,
+                                coverImage: doc.data().coverImage,
+                                id: doc.data().id,
+                                provider: doc.data().provider,
                                 profileImage: doc.data().accounInformation.profileImage,
                             }
                             };
@@ -113,6 +110,31 @@ export class User  extends Model{
 
         } catch (error) {
             throw new Error(error);
+        }
+    }
+
+    public static async findByEmail(email: string): Promise<IUser> {
+        let user: IUser = null;
+        try {
+            return await this.collection().where('email','==', email).limit(1).get().then(query => {
+                if(!query.empty) {
+                    const doc = query.docs[0];
+                    user = {
+                        id: doc.id,
+                        email: doc.data().email,
+                        fullName: doc.data().fullName,
+                        accounInformation: {
+                            id: doc.data().id,
+                            provider: doc.data().provider,
+                            coverImage: doc.data().coverImage,
+                            profileImage: doc.data().accounInformation.profileImage,
+                        },
+                    };
+                }
+                return user;
+            });
+        } catch(error) {
+
         }
     }
 }
