@@ -5,6 +5,7 @@ import { User } from '../models/user.class';
 import { Validate } from '../helpers/validate-heper';
 import { IGenericResponse } from '../interfaces/igeneric-response';
 import { IGenericSuccess } from '../interfaces/igeneric-success';
+import { IGenericError } from '../interfaces/igeneric-error';
 
 export class UserController {
     public static async create(req: Request, res: Response) {
@@ -20,11 +21,12 @@ export class UserController {
             user.created = DateHelper.current().getTime();
             user.updated = DateHelper.current().getTime();
             user.state = true;
-            const userFind = User.findByEmail(user.email);
+            const userFind = await User.findByEmail(user.email);
+
             if (userFind) {
-                const generic: IGenericSuccess = {
-                    message: 'use_already_exists',
-                    message_description: 'User already exists'
+                const generic: IGenericError = {
+                    error: 'use_already_exists',
+                    error_description: 'User already exists'
                 };
                 return res.status(409).send(generic);
             }
