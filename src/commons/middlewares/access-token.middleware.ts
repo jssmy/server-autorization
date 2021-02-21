@@ -1,5 +1,5 @@
 import { NextFunction } from "express";
-import {  Request, Response }  from 'express';
+import { Request, Response } from 'express';
 import { GrantType } from "../emuns/grant-type.enum";
 import { AuthErrorTypes, OauthError } from "../constants/oauth.errors";
 import { IGenericError } from "../interfaces/igeneric-error";
@@ -12,7 +12,7 @@ import { IUser } from "../interfaces/iuser";
 
 export class AccessTokenMiddleware {
     public static async validate(req: Request, res: Response, next: NextFunction) {
-        
+
         const grant = req.header('grant_type');
 
         if (!grant) {
@@ -20,16 +20,21 @@ export class AccessTokenMiddleware {
             return res.status(error.status).send(error.body);
         }
 
-        if ([GrantType.refresh_token.toString(), GrantType.password.toString(), GrantType.logout.toString(), GrantType.access_social_provider.toString()].indexOf(grant) === -1) {
+        if ([
+            GrantType.refresh_token.toString(),
+            GrantType.password.toString(),
+            GrantType.logout.toString(),
+            GrantType.access_social_provider.toString(),
+            GrantType.create_user.toString()
+        ].indexOf(grant) === -1) {
             const error = AuthErrorHelper.generic(AuthErrorTypes.invalidGrantType);
             return res.status(error.status).send(error.body);
         }
 
-        if(grant === GrantType.password) { // valid header token | password
-
+        if (grant === GrantType.password) { // valid header token | password
             if (!req.header('email')) {
                 const error = AuthErrorHelper.generic(AuthErrorTypes.missingEmailCredetential);
-                return  res.status(error.status).send(error.body);
+                return res.status(error.status).send(error.body);
             } else if (!req.header('password')) {
                 const error = AuthErrorHelper.generic(AuthErrorTypes.missingPasswordCredential);
                 return res.status(error.status).send(error.body);
@@ -57,10 +62,10 @@ export class AccessTokenMiddleware {
                     return res.status(error.status).send(error.body);
                 }
             } else if (userProvider.accounInformation.provider === 'facebook') {
-                
+
             }
 
         }
-        return next(); 
+        return next();
     }
 }
