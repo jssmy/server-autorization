@@ -37,7 +37,7 @@ export class UserController {
             const generated = OAuthHelper.generateAccess(userCreated);
             await  RefreshToken.create(generated.refresh_token);
             const response = AuthMessageHelper.set(generated.access_token);
-            res.status(response.status).send(response.body);
+            return res.status(response.status).send(response.body);
 
         } catch (error) {
             const generic: IGenericResponse = {
