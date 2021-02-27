@@ -6,7 +6,9 @@ import { Validate } from '../helpers/validate-heper';
 import { IGenericResponse } from '../interfaces/igeneric-response';
 import { IGenericSuccess } from '../interfaces/igeneric-success';
 import { IGenericError } from '../interfaces/igeneric-error';
-
+import { OAuthHelper } from '../helpers/oauth-helper';
+import { RefreshToken } from '../models/refresh-token.class';
+import { AuthMessageHelper } from '../helpers/auth-messages-helper';
 export class UserController {
     public static async create(req: Request, res: Response) {
         try {
@@ -31,12 +33,11 @@ export class UserController {
                 return res.status(409).send(generic);
             }
 
-            await User.create(user);
-            const generic: IGenericSuccess = {
-                message: 'user_created',
-                message_description: 'User has been created'
-            };
-            res.status(200).send(generic);
+            const userCreated =  await User.create(user);
+            const generated = OAuthHelper.generateAccess(userCreated);
+            await  RefreshToken.create(generated.refresh_token);
+            const response = AuthMessageHelper.set(generated.access_token);
+            res.status(response.status).send(response.body);
 
         } catch (error) {
             const generic: IGenericResponse = {

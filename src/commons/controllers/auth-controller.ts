@@ -11,6 +11,7 @@ import { User } from '../models/user.class';
 import { AuthMessagesType } from '../constants/oauth.messges';
 import { AuthErrorHelper } from '../helpers/auth-error-helper';
 import { AuthMessageHelper } from '../helpers/auth-messages-helper';
+import { IGenericError } from '../interfaces/igeneric-error';
 
 export class AuthController {
 
@@ -30,9 +31,8 @@ export class AuthController {
                     return res.status(generic.status).send(generic.body);
                 }
                 default: {
-                    return res.status(500).send({
-                        message: 'Not grant_type'
-                    });
+                    const generic = AuthErrorHelper.generic(AuthErrorTypes.invalidGrantType);
+                    return res.status(generic.status).send(generic.body);
                 }
             }
         } catch (error) {
